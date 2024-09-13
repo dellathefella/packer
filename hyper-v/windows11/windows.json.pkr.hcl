@@ -23,6 +23,18 @@ locals {
   version = formatdate("YYYY.MM.DD", timestamp())
 }
 
+variable "output_directory" {
+  type        = string
+  description = "Output for storage of artifacts."
+  default     = null
+}
+
+variable "temp_path" {
+  type        = string
+  description = "Output for temporary files during the build."
+  default     = null
+}
+
 variable "vm_name" {
   type        = string
   description = "Image name"
@@ -110,8 +122,10 @@ variable "guest_additions_mode" {
 }
 
 source "hyperv-iso" "windows11" {
-  boot_command = ["a<enter><wait>"]
-  boot_wait    = "2s"
+  boot_command     = ["a<enter><wait>a<enter><wait>a<enter><wait>a<enter>"]
+  boot_wait        = "1s"
+  output_directory = var.output_directory
+  temp_path        = var.temp_path
   // VM specifications
   vm_name                          = var.vm_name
   cpus                             = var.vm_cpus
@@ -135,8 +149,13 @@ source "hyperv-iso" "windows11" {
   winrm_password   = var.winrm_password
   winrm_timeout    = "12h"
   shutdown_command = "shutdown /s /t 10 /f"
-  cd_files         = ["./setup/*"]
-  cd_label         = "scripts"
+  cd_content = {
+    "enable-rdp.cmd"      = file("./scripts/enable-rdp.cmd"),
+    "enable-winrm.ps1"    = file("./scripts/enable-winrm.ps1"),
+    "disable-autolog.ps1" = file("./scripts/disable-autolog.ps1"),
+    "autounattend.xml"    = templatefile("./templates/autounattend.pkrtmpl.xml", { vm_name = var.vm_name }),
+  }
+  cd_label = "scripts"
 }
 
 build {
@@ -162,6 +181,12 @@ build {
   provisioner "powershell" {
     elevated_user     = var.winrm_username
     elevated_password = var.winrm_password
-    scripts           = ["./setup/disable-autolog.ps1"]
+    scripts           = ["./scripts/disable-autolog.ps1"]
   }
+
+  provisioner "file" {
+    destination = "C:/test-config.yaml"
+    content     = templatefile("./templates/test-config.pkrtmpl.yaml", { vm_name = var.vm_name, build_timestamp = formatdate("YYYY.MM.DD", timestamp())  })
+  }
+
 }
