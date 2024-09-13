@@ -186,7 +186,7 @@ build {
 
   provisioner "file" {
     destination = "C:/test-config.yaml"
-    content     = templatefile("./templates/test-config.pkrtmpl.yaml", { vm_name = var.vm_name, build_timestamp = formatdate("YYYY.MM.DD", timestamp())  })
+    content     = templatefile("./templates/test-config.pkrtmpl.yaml", { vm_name = var.vm_name, build_timestamp = formatdate("YYYY.MM.DD", timestamp()) })
   }
 
 }
