@@ -1,12 +1,12 @@
 // vCenter Server
-vcenter_host            = "vcsa03.lab.local"
-vcenter_cluster         = "CL-MGNT"
-vcenter_datastore       = "VMFS-LOC-ESXI02-1"
-host                    = "192.168.11.11"
-vcenter_network         = "vlan13-srv"
+vcenter_host      = "vcsa03.lab.local"
+vcenter_cluster   = "CL-MGNT"
+vcenter_datastore = "VMFS-LOC-ESXI02-1"
+host              = "192.168.11.11"
+vcenter_network   = "vlan13-srv"
 
 // Hardware specifications
-name                    = "winsrv2022-01" 
+name                    = "winsrv2022-01"
 operating_system_vm     = "windows2019srv_64Guest"
 vm_firmware             = "efi-secure"
 vm_cdrom_type           = "sata"
@@ -34,6 +34,6 @@ vm_shutdown_command = "shutdown /s /t 10 /f /d p:4:1 /c \"Shutdown by Packer\""
 // Latest VMware tools https://packages.vmware.com/tools/releases/latest/windows/x64/ 
 vmware_tools_iso = "[VMFS-LOC-ESXI02-1] iso/VMware-tools-windows-12.2.5-21855600.iso"
 # Find File hash by using the Get-FileHash PS command
-winsrv_iso          = "[VMFS-LOC-ESXI02-1] iso/en-us_windows_server_2022_updated_may_2023_x64_dvd_7eb3ad7c.iso"
+winsrv_iso = "[VMFS-LOC-ESXI02-1] iso/en-us_windows_server_2022_updated_may_2023_x64_dvd_7eb3ad7c.iso"
 # winsrv_iso_checksum = "FE76026E6A6FDA954D5D2CD110A03428A73D5B2294AACA5C49936304A938494B"
-floppy_img_path     = "[VMFS-LOC-ESXI02-1] iso/pvscsi-Windows8.flp"
+floppy_img_path = "[VMFS-LOC-ESXI02-1] iso/pvscsi-Windows8.flp"
